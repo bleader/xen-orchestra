@@ -27,6 +27,16 @@
                 {{ t('action:create-bonded-network') }}
               </UiLink>
             </MenuItem>
+            <MenuItem>
+              <UiLink
+                class="new-network-link"
+                :to="{ name: '/network/new-private', query: { poolid: pool.id } }"
+                icon="fa:plus"
+                size="medium"
+              >
+                {{ t('action:create-private-network') }}
+              </UiLink>
+            </MenuItem>
           </MenuList>
         </template>
       </NetworksTable>

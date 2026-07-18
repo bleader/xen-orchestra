@@ -33,6 +33,7 @@
 - [XO6/VM] Add "New VM" button on Host view (PR [#10048](https://github.com/vatesfr/xen-orchestra/pull/10048))
 - [xo-server] expose more metrics when doing a memory dump (PR [#10041](https://github.com/vatesfr/xen-orchestra/pull/10041))
 - [sdn-controller] Add `POST /rest/v0/plugins/sdn-controller/pools/:id/actions/create_private_network`
+- [XO6/Network] Add ability to create a private network (GRE/VxLAN) from the pool networks tab
 
 ### Bug fixes
 

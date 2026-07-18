@@ -247,6 +247,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/network/new-private': RouteRecordInfo<
+      '/network/new-private',
+      '/network/new-private',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/pool/[id]': RouteRecordInfo<
       '/pool/[id]',
       '/pool/:id',
@@ -680,6 +687,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/network/new-internal.vue': {
       routes:
         | '/network/new-internal'
+      views:
+        | never
+    }
+    'src/pages/network/new-private.vue': {
+      routes:
+        | '/network/new-private'
       views:
         | never
     }
