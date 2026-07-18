@@ -787,6 +787,85 @@ class SDNController extends EventEmitter {
               )
             },
           },
+          {
+            endpoint: '/pools/{id}/actions/create_private_network',
+            description:
+              'Create a pool-wide private network on the pool, optionally spanning additional pools.\n\nThe network is created on every pool and hosts are connected through GRE or VxLAN tunnels.\n\nCan only be used by an administrator.',
+
+            method: 'post',
+            tags: ['sdn-controller'],
+            params: {
+              id: { type: 'string', example: 'b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5' },
+            },
+            query: {
+              sync: { type: 'boolean', optional: true },
+            },
+            body: {
+              name: { type: 'string', example: 'my private network' },
+              description: { type: 'string', example: 'Private network created from the REST API', optional: true },
+              pifId: { type: 'string', example: '0eb90cec-2c96-f4ff-51a3-c2c3661e759f' },
+              encapsulation: { type: 'enum', enum: ['gre', 'vxlan'], example: 'gre' },
+              encrypted: { type: 'boolean', example: false, optional: true },
+              mtu: { type: 'number', example: 1500, optional: true },
+              preferredCenterId: { type: 'string', example: '5aef74a4-fbbf-4996-b8e7-f8a55b0deb84', optional: true },
+              additionalPools: {
+                type: 'array',
+                optional: true,
+                items: {
+                  type: 'object',
+                  fields: {
+                    poolId: { type: 'string', example: '9b4776f9-b674-4cc9-9b8a-6a4a0f7f36a2' },
+                    pifId: { type: 'string', example: '84d24437-763b-90fe-e8b1-fd4b3a20c8f7' },
+                  },
+                },
+              },
+            },
+            responses: [
+              {
+                status: 202,
+                description: 'Private network creation started, returns the task watching the creation',
+                schema: { taskId: { type: 'string' } },
+              },
+              {
+                status: 204,
+                description: 'Private network created successfully',
+              },
+            ],
+            middlewares: [{ name: 'json' }],
+            callback: ({ req, createAction }) => {
+              const poolId = req.params.id
+              const { additionalPools = [], pifId, description = '', ...rest } = req.body
+
+              const poolIds = [poolId]
+              const pifIds = [pifId]
+              for (const pool of additionalPools) {
+                poolIds.push(pool.poolId)
+                pifIds.push(pool.pifId)
+              }
+
+              if (new Set(poolIds).size !== poolIds.length) {
+                throw invalidParameters('each pool can only be used once')
+              }
+
+              poolIds.forEach((id, i) => {
+                const pif = this._xo.getObject(pifIds[i], 'PIF')
+                if (pif.$pool !== id) {
+                  throw invalidParameters(`PIF ${pif.id} does not belong to pool ${id}`)
+                }
+              })
+
+              return createAction(() => createPrivateNetwork({ poolIds, pifIds, description, ...rest }), {
+                sync: req.query.sync ?? false,
+                statusCode: 204,
+                taskProperties: {
+                  name: 'create private network',
+                  objectId: poolId,
+                  params: req.body,
+                  objectType: 'pool',
+                },
+              })
+            },
+          },
         ],
         '/plugins/sdn-controller'
       )
