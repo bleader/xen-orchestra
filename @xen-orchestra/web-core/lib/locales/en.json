@@ -456,6 +456,7 @@
   "job:arg:allocated-space-required": "Allocated space is required",
   "job:arg:bond-mode-required": "Bond mode is required",
   "job:arg:direction-required": "Direction is required",
+  "job:arg:encapsulation-required": "Encapsulation is required",
   "job:arg:file-required": "File is required",
   "job:arg:host-required": "Host is required",
   "job:arg:ip-range-required": "IP range is required",

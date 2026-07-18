@@ -456,6 +456,7 @@
   "job:arg:allocated-space-required": "L'espace alloué est obligatoire",
   "job:arg:bond-mode-required": "Le mode de liaison est obligatoire",
   "job:arg:direction-required": "La direction est obligatoire",
+  "job:arg:encapsulation-required": "L'encapsulation est obligatoire",
   "job:arg:file-required": "Le fichier est obligatoire",
   "job:arg:host-required": "L'hôte est requis",
   "job:arg:ip-range-required": "L'adresse IP est obligatoire",
